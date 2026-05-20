@@ -1,5 +1,7 @@
 // ─── Shared utilities (DRY: import from here, never redefine) ────────────────
 
+import { SERVER_PATH } from "../../env"
+
 /** Format paise → ₹ currency string */
 export function formatAmount(currency, paise) {
   if (!paise && paise !== 0) return '—'
@@ -63,7 +65,6 @@ export function statusLabel(status = '') {
 export async function loadLinks() {
   try {
     const raw = await apiFetchLinks()
-    console.log(raw)
     return raw || []
   } catch {
     return []
@@ -107,7 +108,7 @@ function authHeaders(extraHeaders = {}) {
 }
 
 export async function apiLogin(pin) {
-  const res = await fetch('/api/auth/login', {
+  const res = await fetch(`${SERVER_PATH}/api/auth/login` , {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ pin }),
@@ -121,7 +122,7 @@ export async function apiLogin(pin) {
 
 /** POST /api/create-link */
 export async function apiCreateLink(payload) {
-  const res = await fetch('/api/create-link', {
+  const res = await fetch(`${SERVER_PATH}/api/create-link`, {
     method: 'POST',
     headers: authHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify(payload),
@@ -137,7 +138,7 @@ export async function apiCreateLink(payload) {
 
 /** GET /api/link/:id */
 export async function apiFetchLink(id) {
-  const res = await fetch(`/api/link/${id}`, { headers: authHeaders() })
+  const res = await fetch(`${SERVER_PATH}/api/link/${id}`, { headers: authHeaders() })
   const data = await res.json()
   if (!res.ok) {
     throw new Error(
@@ -150,7 +151,7 @@ export async function apiFetchLink(id) {
 /** GET /api/links */
 export async function apiFetchLinks() {
   try {
-    const res = await fetch('/api/links', { headers: authHeaders() })
+    const res = await fetch(`${SERVER_PATH}/api/links`, { headers: authHeaders() })
     const data = await res.json()
     if (!res.ok) {
       throw new Error(
