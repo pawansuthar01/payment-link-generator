@@ -203,10 +203,13 @@ function Topbar({ linksCount, authenticated, onLogout }) {
 }
 
 function Shell({ children, linksCount, authenticated, onAuthenticated, onLogout }) {
+  const location = useLocation()
+  const isPublicRoute = location.pathname === '/thank-you'
+
   return (
     <div className="app-shell">
       <Topbar linksCount={linksCount} authenticated={authenticated} onLogout={onLogout} />
-      {authenticated ? (
+      {authenticated || isPublicRoute ? (
         <main>{children}</main>
       ) : (
         <main className="auth-shell">
