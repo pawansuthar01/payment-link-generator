@@ -6,7 +6,19 @@ import jwt from 'jsonwebtoken'
 dotenv.config()
 
 const app = express()
-app.use(cors())
+
+const corsOptions = {
+  origin: [
+    'https://paytx.vercel.app',
+    'http://localhost:5173', // local dev
+    'http://localhost:3000', // local dev alt
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
 const RAZOR_KEY_ID = process.env.RAZORPAY_KEY_ID || ''
